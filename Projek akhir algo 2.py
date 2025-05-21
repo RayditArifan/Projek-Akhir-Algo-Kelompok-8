@@ -65,7 +65,7 @@ def tambah_parent_node(graph):
     graph[new_parent] = [child]
     print(f"Node parent baru '{new_parent}' berhasil ditambahkan di atas '{child}'.")
 
-def menu_admin():
+def tambah_admin():
     graph = {
         '0': ['N1', 'E1', 'S1'],
         'N1': ['N2'],
