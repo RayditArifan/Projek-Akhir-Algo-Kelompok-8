@@ -128,7 +128,7 @@ def admin_menu():
         print("1. Tambah Data Pelanggan")
         print("2. Lihat Peta Wahana")
         print("3. Tambah titik rute")
-        print("4. Hapus baris peta")  # Tambahkan menu hapus baris peta
+        print("4. Hapus baris peta")  
         print("5. Logout")
         choice = input("Pilih menu: ")
 
@@ -147,6 +147,7 @@ def admin_menu():
                 print("Index baris harus berupa angka.")
             input("Tekan ENTER untuk kembali...")
         elif choice == '5':
+            print("\nTerima kasih telah menggunakan menu admin. Sampai jumpa!\n")
             break
         else:
             print("Pilihan tidak valid.")
@@ -297,6 +298,5 @@ def tampilkan_peta(peta):
     for i, (lokasi, tujuan) in enumerate(peta.items()):
         print(f"{i+1}. {lokasi} ➜ {', '.join(tujuan) if tujuan else '-'}")
 
-if __name__ == "__main__":
-    initialize_files()
-    menu_utama()
+initialize_files()
+menu_utama()
