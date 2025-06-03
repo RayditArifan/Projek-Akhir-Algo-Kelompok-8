@@ -80,11 +80,11 @@ def menu_utama():
     elif choice == '2':
         login_admin()
     elif choice == '0':
-        print("Terima kasih telah menggunakan PathFinder!")
+        print("Terima kasih telah menggunakan PathFinder😍")
         exit()
     else:
-        print("Pilihan tidak valid!")
-        input("Tekan ENTER untuk kembali...")
+        print("Maaf, pilihan tidak tersedia😔")
+        input("Tekan enter untuk kembali")
         menu_utama()
 
 def login():
@@ -97,11 +97,11 @@ def login():
         reader = csv.DictReader(file)
         for row in reader:
             if row['username'] == username and row['kode tiket'] == kode_tiket:
-                print(f"\n[BERHASIL] Selamat datang, {username}!\n")
+                print(f"\nSelamat datang, {username}😊\n")
                 pelanggan_menu()
                 return
-    print("\n[GAGAL] Username atau kode tiket salah.")
-    input("Tekan ENTER untuk kembali...")
+    print("\nUsername atau kode tiket salah")
+    input("Tekan enter untuk kembali")
     menu_utama()
 
 def login_admin():
@@ -114,11 +114,11 @@ def login_admin():
         reader = csv.DictReader(file)
         for row in reader:
             if row['username'] == username and row['password'] == password:
-                print(f"\n[BERHASIL] Selamat datang, {username}!\n")
+                print(f"\nSelamat datang, {username}😊\n")
                 admin_menu()
                 return
-    print("\n[GAGAL] Username atau password salah.")
-    input("Tekan ENTER untuk kembali...")
+    print("\n Username atau password salah ")
+    input("Tekan emter untuk kembali")
     menu_utama()
 
 def admin_menu():
@@ -136,7 +136,7 @@ def admin_menu():
             tambah_pelanggan()
         elif choice == '2':
             tampilkan_peta(PathFinder_map)
-            input("Tekan ENTER untuk kembali...")
+            input("Tekan enter untuk kembali")
         elif choice == '3':
             tambah_titik_peta()
         elif choice == '4':
@@ -145,13 +145,13 @@ def admin_menu():
                 hapus_baris_peta(row_index)
             except ValueError:
                 print("Index baris harus berupa angka.")
-            input("Tekan ENTER untuk kembali...")
+            input("Tekan enter untuk kembali")
         elif choice == '5':
-            print("\nTerima kasih telah menggunakan menu admin. Sampai jumpa!\n")
+            print("\nTerima kasih telah berkunjung Admin🥰\n")
             break
         else:
             print("Pilihan tidak valid.")
-            input("Tekan ENTER untuk kembali...")
+            input("Tekan enter untuk kembali")
 
 def tambah_pelanggan():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -161,23 +161,23 @@ def tambah_pelanggan():
 
     if not username or not kode:
         print("Username dan kode tiket tidak boleh kosong!")
-        input("Tekan ENTER untuk kembali...")
+        input("Tekan enter untuk kembali")
         return
 
     with open(USERS_FILE, mode='r', newline='') as file:
         reader = csv.DictReader(file)
         for row in reader:
             if row['username'] == username:
-                print(f"[GAGAL] Username '{username}' sudah terdaftar.")
-                input("Tekan ENTER untuk kembali...")
+                print(f" Username '{username}' sudah terdaftar ")
+                input("Tekan enter untuk kembali")
                 return
 
     with open(USERS_FILE, mode='a', newline='') as file:
         writer = csv.writer(file)
         writer.writerow([username, kode, 'user'])
 
-    print(f"[SUKSES] Data pelanggan '{username}' berhasil ditambahkan.")
-    input("Tekan ENTER untuk kembali...")
+    print(f"Data pelanggan '{username}' berhasil ditambahkan.")
+    input("Tekan enter untuk kembali")
 
 def insert_route_at_row(from_location, to_location, row_index, file_path=MAP_FILE):
     if not os.path.exists(file_path):
@@ -215,7 +215,7 @@ def tambah_titik_peta():
     except ValueError:
         print("Index baris harus berupa angka.")
 
-    input("Tekan ENTER untuk kembali...")
+    input("Tekan enter untuk kembali")
 
 def hapus_baris_peta(row_index, file_path=MAP_FILE):
     if not os.path.exists(file_path):
@@ -272,8 +272,8 @@ def pelanggan_menu():
         goal_input = input("Masukkan tujuan akhir: ").strip().lower()
 
         if start_input not in nama_wahana_lower_map or goal_input not in nama_wahana_lower_map:
-            print("\n[ERROR] Titik awal atau tujuan tidak valid.")
-            input("Tekan ENTER untuk coba lagi...")
+            print("\nTitik awal atau tujuan tidak valid")
+            input("Tekan enter untuk coba lagi")
             continue
 
         start = nama_wahana_lower_map[start_input]
@@ -288,10 +288,15 @@ def pelanggan_menu():
         else:
             print(f"\nTidak ditemukan jalur dari '{start}' ke '{goal}'.")
 
-        ulang = input("\nApakah ingin mencari rute lain? (y/n): ").strip().lower()
-        if ulang != 'y':
-            print ('TERIMA KASIH TELAH MENGGUNAKAN FITUR KAMI')
-            break
+        while True:
+            ulang = input("\nApakah ingin mencari rute lain? (y/n): ").strip().lower()
+            if ulang == 'y':
+                break
+            elif ulang == 'n':
+                print('TERIMA KASIH TELAH MENGGUNAKAN FITUR KAMI 🥰')
+                return
+            else:
+                print("Input tidak valid! Masukkan hanya 'y' atau 'n'.")
 
 def tampilkan_peta(peta):
     print("\n=========== PATHFINDER MAP SAAT INI ===========")
