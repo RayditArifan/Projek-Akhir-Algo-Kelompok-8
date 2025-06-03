@@ -92,6 +92,12 @@ def login():
     print("\n============== LOGIN USER ==============")
     username = input("Masukkan username: ").strip()
     kode_tiket = input("Masukkan kode tiket: ").strip()
+    print ('1. Coba Lagi')
+    x = input('Masukkan Pilihan: ')
+    if x == '1':
+        login()
+    else:
+        menu_utama()
 
     with open(USERS_FILE, mode='r') as file:
         reader = csv.DictReader(file)
@@ -109,6 +115,12 @@ def login_admin():
     print("\n============== LOGIN ADMIN ==============")
     username = input("Masukkan username admin: ").strip()
     password = input("Masukkan password: ").strip()
+    print ('1. Coba Lagi')
+    x = input('Masukkan Pilihan: ')
+    if x == '1':
+        login_admin()
+    else:
+        menu_utama()
 
     with open(ADMIN_FILE, mode='r') as file:
         reader = csv.DictReader(file)
