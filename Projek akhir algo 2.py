@@ -117,8 +117,8 @@ def login_admin():
                 print(f"\nSelamat datang, {username}😊\n")
                 admin_menu()
                 return
-    print("\n Username atau password salah ")
-    input("Tekan emter untuk kembali")
+    print("\nUsername atau password salah")
+    input("Tekan enter untuk kembali")
     menu_utama()
 
 def admin_menu():
