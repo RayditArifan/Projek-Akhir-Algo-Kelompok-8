@@ -138,10 +138,10 @@ def admin_menu():
             tampilkan_peta(PathFinder_map)
             input("Tekan enter untuk kembali")
         elif choice == '3':
-            tambah_titik_peta()
+            tambah_titik_rute()
         elif choice == '4':
             try:
-                row_index = int(input("Masukkan index baris yang ingin dihapus (tidak bisa kurang dari 2 dan input 2 = urutan ke-1 : "))
+                row_index = int(input("Masukkan index baris yang ingin dihapus: "))
                 hapus_baris_peta(row_index)
             except ValueError:
                 print("Index baris harus berupa angka.")
@@ -202,7 +202,7 @@ def insert_route_at_row(from_location, to_location, row_index, file_path=MAP_FIL
 
     print(f"Route '{from_location}' → '{to_location}' berhasil disisipkan di baris ke-{row_index}.")
 
-def tambah_titik_peta():
+def tambah_titik_rute():
     print("\n--- Tambah Titik Peta ---")
     from_location = input("Masukkan lokasi FROM: ").strip()
     to_location = input("Masukkan lokasi TO: ").strip()
