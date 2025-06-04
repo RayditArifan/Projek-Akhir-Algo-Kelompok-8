@@ -161,6 +161,7 @@ def admin_menu():
             tambah_titik_rute()
         elif choice == '4':
             try:
+                print("\n--- Hapus Baris Peta ---")
                 row_index = int(input("Masukkan index baris yang ingin dihapus: "))
                 hapus_baris_peta(row_index)
             except ValueError:
