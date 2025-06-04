@@ -19,30 +19,30 @@ def initialize_files():
             writer.writerow(['username', 'password', 'role'])
             writer.writerow(['admin', 'admin123', 'admin'])
 
-if not os.path.exists(MAP_FILE): 
-    with open(MAP_FILE, 'w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['from', 'to'])
-        writer.writerows([
-            ['Gerbang Utama', 'Rumah Hantu'],
-            ['Gerbang Utama', 'Tornado'],
-            ['Gerbang Utama', 'Halilintar'],
-            ['Rumah Hantu', 'Kicir Kicir'],
-            ['Tornado', 'Hysteria'],
-            ['Halilintar', 'Bianglala'],
-            ['Kicir Kicir', 'Istana Boneka'],
-            ['Hysteria', 'Gajah Bledug'],
-            ['Bianglala', 'Komidi Putar'],
-            ['Istana Boneka', 'Dunia Kartun'],
-            ['Gajah Bledug', 'Arung Jeram'],
-            ['Komidi Putar', 'Kora Kora'],
-            ['Dunia Kartun', 'Niagara'],
-            ['Niagara', 'Rumah Miring'],
-            ['Rumah Miring', 'Ontang Anting'],
-            ['Ontang Anting', 'Gerbang Utama'],
-            ['Kora Kora', 'Gerbang Utama'],
-            ['Arung Jeram', 'Dunia Kartun'],
-        ])
+    if not os.path.exists(MAP_FILE): 
+        with open(MAP_FILE, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['from', 'to'])
+            writer.writerows([
+                ['Gerbang Utama', 'Rumah Hantu'],
+                ['Gerbang Utama', 'Tornado'],
+                ['Gerbang Utama', 'Halilintar'],
+                ['Rumah Hantu', 'Kicir Kicir'],
+                ['Tornado', 'Hysteria'],
+                ['Halilintar', 'Bianglala'],
+                ['Kicir Kicir', 'Istana Boneka'],
+                ['Hysteria', 'Gajah Bledug'],
+                ['Bianglala', 'Komidi Putar'],
+                ['Istana Boneka', 'Dunia Kartun'],
+                ['Gajah Bledug', 'Arung Jeram'],
+                ['Komidi Putar', 'Kora Kora'],
+                ['Dunia Kartun', 'Niagara'],
+                ['Niagara', 'Rumah Miring'],
+                ['Rumah Miring', 'Ontang Anting'],
+                ['Ontang Anting', 'Gerbang Utama'],
+                ['Kora Kora', 'Gerbang Utama'],
+                ['Arung Jeram', 'Dunia Kartun'],
+            ])
 
 def pathfinder_map():
     graph = {}
@@ -107,8 +107,12 @@ def login():
                 pelanggan_menu()
                 return
     print("\nUsername atau kode tiket salah")
-    input("Tekan enter untuk kembali")
-    menu_utama()
+    print ('1. Coba Lagi')
+    x = input('Masukkan Pilihan: ')
+    if x == '1':
+        login()
+    elif x != '1':
+        menu_utama()
 
 def login_admin():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -130,8 +134,12 @@ def login_admin():
                 admin_menu()
                 return
     print("\nUsername atau password salah")
-    input("Tekan enter untuk kembali")
-    menu_utama()
+    print ('1. Coba Lagi')
+    x = input('Masukkan Pilihan: ')
+    if x == '1':
+        login_admin()
+    elif x != '1':
+        menu_utama()
 
 def admin_menu():
     while True:
