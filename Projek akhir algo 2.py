@@ -76,7 +76,7 @@ def menu_utama():
     choice = input("Pilih menu: ")
 
     if choice == '1':
-        login()
+        login_user()
     elif choice == '2':
         login_admin()
     elif choice == '0':
@@ -87,7 +87,7 @@ def menu_utama():
         input("Tekan enter untuk kembali")
         menu_utama()
 
-def login():
+def login_user():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("\n============== LOGIN USER ==============")
     username = input("Masukkan username: ").strip()
