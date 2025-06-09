@@ -92,12 +92,6 @@ def login():
     print("\n============== LOGIN USER ==============")
     username = input("Masukkan username: ").strip()
     kode_tiket = input("Masukkan kode tiket: ").strip()
-    print ('1. Coba Lagi')
-    x = input('Masukkan Pilihan: ')
-    if x == '1':
-        login()
-    else:
-        menu_utama()
 
     with open(USERS_FILE, mode='r') as file:
         reader = csv.DictReader(file)
@@ -106,40 +100,26 @@ def login():
                 print(f"\nSelamat datang, {username}😊\n")
                 pelanggan_menu()
                 return
-    print("\nUsername atau kode tiket salah")
-    print ('1. Coba Lagi')
-    x = input('Masukkan Pilihan: ')
-    if x == '1':
-        login()
-    elif x != '1':
-        menu_utama()
+    print("\nMaaf, Username atau kode tiket salah ")
+    input("Tekan enter untuk kembali")
+    menu_utama()
 
 def login_admin():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("\n============== LOGIN ADMIN ==============")
     username = input("Masukkan username admin: ").strip()
     password = input("Masukkan password: ").strip()
-    print ('1. Coba Lagi')
-    x = input('Masukkan Pilihan: ')
-    if x == '1':
-        login_admin()
-    else:
-        menu_utama()
 
     with open(ADMIN_FILE, mode='r') as file:
         reader = csv.DictReader(file)
         for row in reader:
             if row['username'] == username and row['password'] == password:
-                print(f"\nSelamat datang, {username}😊\n")
+                print(f"\nSelamat datang, {username}!😊\n")
                 admin_menu()
                 return
-    print("\nUsername atau password salah")
-    print ('1. Coba Lagi')
-    x = input('Masukkan Pilihan: ')
-    if x == '1':
-        login_admin()
-    elif x != '1':
-        menu_utama()
+    print("\nMaaf, Username atau password salah.")
+    input("Tekan enter untuk kembali")
+    menu_utama()
 
 def admin_menu():
     while True:
