@@ -1,0 +1,19 @@
+from,to
+Gerbang Utama,Rumah Hantu
+Gerbang Utama,Tornado
+Gerbang Utama,Halilintar
+Rumah Hantu,Kicir-Kicir
+Tornado,Hysteria
+Halilintar,Bianglala
+Kicir-Kicir,Istana Boneka
+Hysteria,Gajah Bledug
+Bianglala,Komidi Putar
+Istana Boneka,Dunia Kartun
+Gajah Bledug,Arung Jeram
+Komidi Putar,Kora-Kora
+Dunia Kartun,Niagara
+Niagara,Rumah Miring
+Rumah Miring,Ontang-Anting
+Ontang-Anting,Gerbang Utama
+Kora-Kora,Gerbang Utama
+Arung Jeram,Dunia Kartun
