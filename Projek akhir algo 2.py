@@ -135,7 +135,7 @@ def admin_menu():
         if choice == '1':
             tambah_pelanggan()
         elif choice == '2':
-            tampilkan_peta(PathFinder_map)
+            tampilkan_peta()
             input("Tekan enter untuk kembali")
         elif choice == '3':
             tambah_titik_rute()
@@ -299,10 +299,20 @@ def pelanggan_menu():
             else:
                 print("Input tidak valid! Masukkan hanya 'y' atau 'n'.")
 
-def tampilkan_peta(peta):
-    print("\n=========== PATHFINDER MAP SAAT INI ===========")
-    for i, (lokasi, tujuan) in enumerate(peta.items()):
-        print(f"{i+1}. {lokasi} ➜ {', '.join(tujuan) if tujuan else '-'}")
+def tampilkan_peta():
+    if not os.path.exists(MAP_FILE):
+        print(f"File '{MAP_FILE}' tidak ditemukan.")
+        return
+
+    with open(MAP_FILE, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        next(reader)
+        print("\n=========== PETA WAHANA (MAP) ===========")
+        for i, row in enumerate(reader, start=1):
+            if len(row) >= 2:
+                print(f"{i}. {row[0]} → {row[1]}")
+            else:
+                print(f"{i}. Data tidak lengkap.")
 
 initialize_files()
 menu_utama()
