@@ -173,7 +173,7 @@ def tambah_pelanggan():
 
     with open(USERS_FILE, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([username, kode, 'user'])
+        writer.writerow([username, kode, 'Pelanggan'])
 
     print(f"Data pelanggan '{username}' berhasil ditambahkan.")
     input("Tekan enter untuk kembali")
