@@ -136,10 +136,11 @@ def admin_menu():
             tampilkan_peta()
             input("Tekan enter untuk kembali")
         elif choice == '3':
+            tampilkan_peta()
             tambah_titik_rute()
         elif choice == '4':
+            tampilkan_peta()
             try:
-                print("\n--- Hapus Baris Peta ---")
                 row_index = int(input("Masukkan index baris yang ingin dihapus: "))
                 hapus_baris_peta(row_index)
             except ValueError:
@@ -173,7 +174,7 @@ def tambah_pelanggan():
 
     with open(USERS_FILE, mode='a', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow([username, kode, 'Pelanggan'])
+        writer.writerow([username, kode, 'user'])
 
     print(f"Data pelanggan '{username}' berhasil ditambahkan.")
     input("Tekan enter untuk kembali")
@@ -207,7 +208,7 @@ def tambah_titik_rute():
     to_location = input("Masukkan lokasi TO: ").strip()
 
     try:
-        row_index = int(input("Masukkan index baris untuk menyisipkan (mulai dari 1, setelah header): "))
+        row_index = int(input("Masukkan indeks baris untuk disisipkan: "))
 
         insert_route_at_row(from_location, to_location, row_index)
 
@@ -217,6 +218,7 @@ def tambah_titik_rute():
     input("Tekan enter untuk kembali")
 
 def hapus_baris_peta(row_index, file_path=MAP_FILE):
+    
     if not os.path.exists(file_path):
         print(f"File '{file_path}' tidak ditemukan.")
         return
@@ -302,13 +304,23 @@ def tampilkan_peta():
 
     with open(MAP_FILE, mode='r', newline='') as file:
         reader = csv.reader(file)
-        next(reader)
-        print("\n=========== PETA WAHANA (MAP) ===========")
+        header = next(reader)
+
+        print("\n================= PETA WAHANA =================")
+        print("+-------+------------------------+------------------------+")
+        print("| Index | Lokasi Asal            | Lokasi Tujuan          |")
+        print("+-------+------------------------+------------------------+")
+
         for i, row in enumerate(reader, start=1):
             if len(row) >= 2:
-                print(f"{i}. {row[0]} → {row[1]}")
+                from_loc = row[0]
+                to_loc = row[1]
+                print(f"| {i:<5} | {from_loc:<22} | {to_loc:<22} |")
             else:
-                print(f"{i}. Data tidak lengkap.")
+                print(f"| {i:<5} | Data tidak lengkap".ljust(53) + "|")
+
+        print("+-------+------------------------+------------------------+")
+
 
 initialize_files()
 menu_utama()
