@@ -1,4 +1,3 @@
-from collections import deque
 import csv
 import os
 
@@ -62,8 +61,7 @@ def pathfinder_map():
                 graph[end] = []
     return graph
 
-PathFinder_map = pathfinder_map()
-nama_wahana_lower_map = {nama.lower(): nama for nama in PathFinder_map}
+nama_wahana_lower_map = {nama.lower(): nama for nama in pathfinder_map()}
 
 def menu_utama():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -240,24 +238,22 @@ def hapus_baris_peta(row_index, file_path=MAP_FILE):
 
 def bfs(start, goal):
     visited = set()
-    queue = deque([[start]])
-
+    queue = [(start, [start])]  
     if start == goal:
         return [start]
 
     while queue:
-        path = queue.popleft()
-        node = path[-1]
+        node, path = queue.pop(0)
 
         if node not in visited:
-            for neighbor in PathFinder_map.get(node, []):
-                new_path = list(path)
-                new_path.append(neighbor)
-                queue.append(new_path)
-
-                if neighbor == goal:
-                    return new_path
             visited.add(node)
+
+            for neighbor in pathfinder_map().get(node, []):
+                if neighbor == goal:
+                    return path + [neighbor]
+                else:
+                    queue.append((neighbor, path + [neighbor]))
+
     return None
 
 def pelanggan_menu():
@@ -265,7 +261,7 @@ def pelanggan_menu():
         os.system('cls' if os.name == 'nt' else 'clear')
         print("\n=========== MENU PELANGGAN ===========")
         print("Daftar wahana yang tersedia:")
-        for wahana in PathFinder_map:
+        for wahana in pathfinder_map():
             print("-", wahana)
         print("\nMasukkan nama wahana sesuai daftar.\n")
 
