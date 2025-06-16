@@ -5,64 +5,6 @@ USERS_FILE = "user.csv"
 ADMIN_FILE = "admin.csv"
 MAP_FILE = "map.csv"
 
-def initialize_files():
-    if not os.path.exists(USERS_FILE):
-        with open(USERS_FILE, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['username', 'kode tiket', 'role'])
-            writer.writerows(['Aby', '123', 'pelanggan'])
-
-    if not os.path.exists(ADMIN_FILE):
-        with open(ADMIN_FILE, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['username', 'password', 'role'])
-            writer.writerow(['admin', 'admin123', 'admin'])
-
-    if not os.path.exists(MAP_FILE): 
-        with open(MAP_FILE, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(['from', 'to'])
-            writer.writerows([
-                ['Gerbang Utama', 'Rumah Hantu'],
-                ['Gerbang Utama', 'Tornado'],
-                ['Gerbang Utama', 'Halilintar'],
-                ['Rumah Hantu', 'Kicir Kicir'],
-                ['Tornado', 'Hysteria'],
-                ['Halilintar', 'Bianglala'],
-                ['Kicir Kicir', 'Istana Boneka'],
-                ['Hysteria', 'Gajah Bledug'],
-                ['Bianglala', 'Komidi Putar'],
-                ['Istana Boneka', 'Dunia Kartun'],
-                ['Gajah Bledug', 'Arung Jeram'],
-                ['Komidi Putar', 'Kora Kora'],
-                ['Dunia Kartun', 'Niagara'],
-                ['Niagara', 'Rumah Miring'],
-                ['Rumah Miring', 'Ontang Anting'],
-                ['Ontang Anting', 'Gerbang Utama'],
-                ['Kora Kora', 'Gerbang Utama'],
-                ['Arung Jeram', 'Dunia Kartun'],
-            ])
-
-def pathfinder_map():
-    graph = {}
-    if not os.path.exists(MAP_FILE):
-        print(f"File '{MAP_FILE}' tidak ditemukan.")
-        return graph
-
-    with open(MAP_FILE, mode='r', newline='') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            start = row['from']
-            end = row['to']
-            if start not in graph:
-                graph[start] = []
-            graph[start].append(end)
-            if end not in graph:
-                graph[end] = []
-    return graph
-
-nama_wahana_lower_map = {nama.lower(): nama for nama in pathfinder_map()}
-
 def menu_utama():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("\n==================================================")
@@ -85,39 +27,44 @@ def menu_utama():
         input("Tekan enter untuk kembali")
         menu_utama()
 
-def login_user():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("\n============== LOGIN USER ==============")
-    username = input("Masukkan username: ").strip()
-    kode_tiket = input("Masukkan kode tiket: ").strip()
+def user_menu():
+    while True:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("\n=========== MENU PELANGGAN ===========")
+        print("Daftar wahana yang tersedia:")
+        for wahana in pathfinder_map():
+            print("-", wahana)
+        print("\nMasukkan nama wahana sesuai daftar.\n")
 
-    with open(USERS_FILE, mode='r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            if row['username'] == username and row['kode tiket'] == kode_tiket:
-                print(f"\nSelamat datang, {username}😊\n")
-                pelanggan_menu()
+        start_input = input("Masukkan titik awal: ").strip().lower()
+        goal_input = input("Masukkan tujuan akhir: ").strip().lower()
+
+        if start_input not in nama_wahana_lower_map or goal_input not in nama_wahana_lower_map:
+            print("\nTitik awal atau tujuan tidak valid")
+            input("Tekan enter untuk coba lagi")
+            continue
+
+        start = nama_wahana_lower_map[start_input]
+        goal = nama_wahana_lower_map[goal_input]
+        route = bfs(start, goal)
+
+        if route:
+            print(f"\nRute terbaik dari '{start}' ke '{goal}':")
+            for i, step in enumerate(route):
+                print(f"  {i+1}. {step}")
+            print(f"\nTotal langkah: {len(route)-1} wahana\n")
+        else:
+            print(f"\nTidak ditemukan jalur dari '{start}' ke '{goal}'.")
+
+        while True:
+            ulang = input("\nApakah ingin mencari rute lain? (y/n): ").strip().lower()
+            if ulang == 'y':
+                break
+            elif ulang == 'n':
+                print('TERIMA KASIH TELAH MENGGUNAKAN FITUR KAMI 🥰')
                 return
-    print("\nMaaf, Username atau kode tiket salah ")
-    input("Tekan enter untuk kembali")
-    menu_utama()
-
-def login_admin():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print("\n============== LOGIN ADMIN ==============")
-    username = input("Masukkan username admin: ").strip()
-    password = input("Masukkan password: ").strip()
-
-    with open(ADMIN_FILE, mode='r') as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            if row['username'] == username and row['password'] == password:
-                print(f"\nSelamat datang, {username}!😊\n")
-                admin_menu()
-                return
-    print("\nMaaf, Username atau password salah.")
-    input("Tekan enter untuk kembali")
-    menu_utama()
+            else:
+                print("Input tidak valid! Masukkan hanya 'y' atau 'n'.")
 
 def admin_menu():
     while True:
@@ -152,6 +99,40 @@ def admin_menu():
         else:
             print("Pilihan tidak valid.")
             input("Tekan enter untuk kembali")
+
+def login_user():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("\n============== LOGIN USER ==============")
+    username = input("Masukkan username: ").strip()
+    kode_tiket = input("Masukkan kode tiket: ").strip()
+
+    with open(USERS_FILE, mode='r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if row['username'] == username and row['kode tiket'] == kode_tiket:
+                print(f"\nSelamat datang, {username}😊\n")
+                user_menu()
+                return
+    print("\nMaaf, Username atau kode tiket salah ")
+    input("Tekan enter untuk kembali")
+    menu_utama()
+
+def login_admin():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("\n============== LOGIN ADMIN ==============")
+    username = input("Masukkan username admin: ").strip()
+    password = input("Masukkan password: ").strip()
+
+    with open(ADMIN_FILE, mode='r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if row['username'] == username and row['password'] == password:
+                print(f"\nSelamat datang, {username}!😊\n")
+                admin_menu()
+                return
+    print("\nMaaf, Username atau password salah.")
+    input("Tekan enter untuk kembali")
+    menu_utama()
 
 def tambah_pelanggan():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -238,65 +219,6 @@ def hapus_baris_peta(row_index, file_path=MAP_FILE):
 
     print(f"Baris ke-{row_index} berhasil dihapus: {removed}")
 
-def bfs(start, goal):
-    visited = set()
-    queue = [(start, [start])]  
-    if start == goal:
-        return [start]
-
-    while queue:
-        node, path = queue.pop(0)
-
-        if node not in visited:
-            visited.add(node)
-
-            for neighbor in pathfinder_map().get(node, []):
-                if neighbor == goal:
-                    return path + [neighbor]
-                else:
-                    queue.append((neighbor, path + [neighbor]))
-
-    return None
-
-def pelanggan_menu():
-    while True:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print("\n=========== MENU PELANGGAN ===========")
-        print("Daftar wahana yang tersedia:")
-        for wahana in pathfinder_map():
-            print("-", wahana)
-        print("\nMasukkan nama wahana sesuai daftar.\n")
-
-        start_input = input("Masukkan titik awal: ").strip().lower()
-        goal_input = input("Masukkan tujuan akhir: ").strip().lower()
-
-        if start_input not in nama_wahana_lower_map or goal_input not in nama_wahana_lower_map:
-            print("\nTitik awal atau tujuan tidak valid")
-            input("Tekan enter untuk coba lagi")
-            continue
-
-        start = nama_wahana_lower_map[start_input]
-        goal = nama_wahana_lower_map[goal_input]
-        route = bfs(start, goal)
-
-        if route:
-            print(f"\nRute terbaik dari '{start}' ke '{goal}':")
-            for i, step in enumerate(route):
-                print(f"  {i+1}. {step}")
-            print(f"\nTotal langkah: {len(route)-1} wahana\n")
-        else:
-            print(f"\nTidak ditemukan jalur dari '{start}' ke '{goal}'.")
-
-        while True:
-            ulang = input("\nApakah ingin mencari rute lain? (y/n): ").strip().lower()
-            if ulang == 'y':
-                break
-            elif ulang == 'n':
-                print('TERIMA KASIH TELAH MENGGUNAKAN FITUR KAMI 🥰')
-                return
-            else:
-                print("Input tidak valid! Masukkan hanya 'y' atau 'n'.")
-
 def tampilkan_peta():
     if not os.path.exists(MAP_FILE):
         print(f"File '{MAP_FILE}' tidak ditemukan.")
@@ -321,6 +243,83 @@ def tampilkan_peta():
 
         print("+-------+------------------------+------------------------+")
 
+def pathfinder_map():
+    graph = {}
+    if not os.path.exists(MAP_FILE):
+        print(f"File '{MAP_FILE}' tidak ditemukan.")
+        return graph
+
+    with open(MAP_FILE, mode='r', newline='') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            start = row['from']
+            end = row['to']
+            if start not in graph:
+                graph[start] = []
+            graph[start].append(end)
+            if end not in graph:
+                graph[end] = []
+    return graph
+
+nama_wahana_lower_map = {nama.lower(): nama for nama in pathfinder_map()}
+
+def initialize_files():
+    if not os.path.exists(USERS_FILE):
+        with open(USERS_FILE, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['username', 'kode tiket', 'role'])
+            writer.writerows(['Aby', '123', 'pelanggan'])
+
+    if not os.path.exists(ADMIN_FILE):
+        with open(ADMIN_FILE, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['username', 'password', 'role'])
+            writer.writerow(['admin', 'admin123', 'admin'])
+
+    if not os.path.exists(MAP_FILE): 
+        with open(MAP_FILE, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['from', 'to'])
+            writer.writerows([
+                ['Gerbang Utama', 'Rumah Hantu'],
+                ['Gerbang Utama', 'Tornado'],
+                ['Gerbang Utama', 'Halilintar'],
+                ['Rumah Hantu', 'Kicir Kicir'],
+                ['Tornado', 'Hysteria'],
+                ['Halilintar', 'Bianglala'],
+                ['Kicir Kicir', 'Istana Boneka'],
+                ['Hysteria', 'Gajah Bledug'],
+                ['Bianglala', 'Komidi Putar'],
+                ['Istana Boneka', 'Dunia Kartun'],
+                ['Gajah Bledug', 'Arung Jeram'],
+                ['Komidi Putar', 'Kora Kora'],
+                ['Dunia Kartun', 'Niagara'],
+                ['Niagara', 'Rumah Miring'],
+                ['Rumah Miring', 'Ontang Anting'],
+                ['Ontang Anting', 'Gerbang Utama'],
+                ['Kora Kora', 'Gerbang Utama'],
+                ['Arung Jeram', 'Dunia Kartun'],
+            ])
+
+def bfs(start, goal):
+    visited = set()
+    queue = [(start, [start])]  
+    if start == goal:
+        return [start]
+
+    while queue:
+        node, path = queue.pop(0)
+
+        if node not in visited:
+            visited.add(node)
+
+            for neighbor in pathfinder_map().get(node, []):
+                if neighbor == goal:
+                    return path + [neighbor]
+                else:
+                    queue.append((neighbor, path + [neighbor]))
+
+    return None
 
 initialize_files()
 menu_utama()
